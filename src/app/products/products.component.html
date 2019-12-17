@@ -1,0 +1,49 @@
+<div *ngIf="products">
+  <div><h3>{{title}}</h3></div>
+  <div *ngFor="let prod of products._embedded.products">
+    <div class="col-md-4">
+    <div class="panel panel-default heigthed">
+      <div class="panel-heading">{{prod.name}}</div>
+      <div class="panel-body">
+        <img class="img-thumbnail img-rounded btn" (click)="onProductDetails(prod)" [src]="this.catService.host+'/photoProduct/'+prod.id+'?ts='+getTS()"/>    
+        <div *ngIf="isAdmin()">
+          <button (click)="onEditPhoto(prod)">
+            <span class="glyphicon glyphicon-edit"></span>
+          </button>
+          <p *ngIf="editPhoto && currentProduct==prod">
+            <input type="file" (change)="onSelectFile($event)">
+            <button class="btn btn-success" (click)="uploadPhoto()">Upload</button>
+            {{progress}}
+          </p>
+        </div>
+        <div>
+          {{prod.description}}
+        </div>
+        <div>
+          <label>Price : {{prod.currentPrice | number:'0.00'}} </label>
+        </div>
+        <div>
+          <span *ngIf="prod.promotion">
+              <img src="assets/images/promo.png" class="img-thumbnail igm-circle" height="30">
+          </span>
+          <span *ngIf="prod.selected">
+              <img src="assets/images/favorite.png" class="img-thumbnail igm-circle" height="30">
+          </span>
+          <span *ngIf="prod.available">
+              <img src="assets/images/available.png" class="img-thumbnail igm-circle" height="30">
+          </span>
+        </div>
+        <div>
+          <form #f="ngForm" (ngSubmit)="onAddProductToCaddy(prod)">
+            <label class="control-label">Quantité :</label>
+            <input type="number" name="quantity" [(ngModel)]="prod.quantity" ngModel style="width: 40px" >
+            <button>
+              <img src="assets/images/caddy.png" alt="">
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
